@@ -1,0 +1,57 @@
+# CHIRON configuration example.
+#
+# Copy this file to config.yaml and adjust the values for your environment,
+# or point CHIRON at it directly with `--config examples/config.example.yaml`.
+#
+# Field names below match the dataclasses in chiron/config.py exactly:
+#   llm        -> LlmConfig
+#   paths      -> PathsConfig
+#   validation -> ValidationConfig
+#   knowledge  -> KnowledgeConfig
+# Any section may be omitted entirely; CHIRON falls back to built-in defaults.
+#
+# Every value can also be overridden by an environment variable using the
+# CHIRON_ prefix, with dots and underscores turned into dashed paths, e.g.
+#   CHIRON_PATHS_KERNEL_DIR=/path/to/linux    (overrides paths.kernel_dir)
+#   CHIRON_LLM_MODEL=deepseek-chat
+#
+# The LLM API key is NOT stored here. Set it in the environment, for example:
+#   export DEEPSEEK_API_KEY=sk-...
+# The variable name is itself configurable via llm.api_key_env.
+
+llm:
+  base_url: https://api.deepseek.com/v1
+  # api_key_env: DEEPSEEK_API_KEY   # name of the env var holding the key
+  model: deepseek-chat
+  temperature: 0.2
+  max_retries: 3
+  timeout_seconds: 180.0
+
+paths:
+  kernel_dir: /path/to/linux          # Linux kernel source tree (RISCV_64 target)
+  cross_gcc: /usr/bin/riscv64-linux-gnu-gcc
+  qemu: /path/to/qemu-system-riscv64  # QEMU for RISC-V
+  # image: ""                          # defaults to <kernel>/arch/riscv/boot/Image
+  # rootfs: ""                         # rootfs image; empty means QEMU boot is unavailable
+  kernel_args: root=/dev/vda console=ttyS0
+
+validation:
+  defconfig: defconfig
+  compile_timeout_seconds: 1800.0
+  boot_timeout_seconds: 180.0
+  # checkpatch_script: ""              # defaults to <kernel>/scripts/checkpatch.pl
+  repro_guest_fs: /home
+
+knowledge:
+  vector_store: chroma                 # or: memory
+  # persist_dir: ""                    # defaults to <workdir>/knowledge
+  chunk_size: 1200
+  chunk_overlap: 200
+  embed_model: default
+  mbox_archive_url: https://lore.kernel.org/kvm-riscv/
+  max_messages: 0                      # 0 = no cap; >0 limits the mbox crawl
+
+# Top-level app settings.
+repair_max_iterations: 5
+diagnose_max_evidence_queries: 8
+# workdir: ""                          # defaults to <cwd>/.chiron

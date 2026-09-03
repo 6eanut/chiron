@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+
+# CHIRON runtime working directory
+.chiron/
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

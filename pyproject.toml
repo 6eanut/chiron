@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chiron"
+version = "0.1.0"
+description = "Automated repair for RISC-V KVM fuzzing crashes via domain knowledge, multi-view diagnosis, and closed-loop validation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-2.0" }
+authors = [{ name = "Jiakai Xu" }]
+
+dependencies = [
+    "openai>=1.30.0",
+    "pyyaml>=6.0",
+    "chromadb>=0.4.0",
+    "requests>=2.31",
+    "mailbox>=0.1.0",
+]
+
+[project.optional-dependencies]
+# Extra providers / embedders can be added here.
+dev = ["pytest>=7.0", "ruff>=0.4"]
+
+[project.scripts]
+chiron = "chiron.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["chiron*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.setuptools.package-data]
+chiron = ["prompts/*.txt"]

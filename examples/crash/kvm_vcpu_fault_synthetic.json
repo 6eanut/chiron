@@ -1,0 +1,31 @@
+{
+  "title": "KVM: BUG: kernel NULL dereference in kvm_vcpu_fault_in_page (synthetic)",
+  "description": "SYNTHETIC ILLUSTRATIVE ARTIFACT, NOT ONE OF THE EVALUATED DEFECTS. This file exists only to demonstrate CHIRON's input schema and pipeline on an artificial crash. A fuzzer exercised concurrent guest stage-2 page faults during a vCPU teardown; the fault handler dereferenced a vCPU mmu context that had been detached, crashing on a NULL stage-2 context. Nothing here corresponds to a real upstream defect, and it is intentionally unrelated to the paper's evaluated bugs.",
+  "repository": "linux",
+  "commit": "0128c8a9f0ab",
+  "machineInfo": {
+    "arch": "riscv64",
+    "kernel_path": "arch/riscv/boot/Image",
+    "smc_version": "synthetic"
+  },
+  "log": [
+    "kvm: vcpu 3 faulting guest stage-2 address 0x0000000fffe0",
+    "kvm: vcpu 3 context detached during concurrent teardown",
+    "BUG: kernel NULL pointer dereference, address 0000000000000000",
+    "Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000",
+    "kasan_report at ffffffff80a1b2c4 arch/riscv/kvm/vcpu.c:412",
+    "RIP: 0033:kvm_vcpu_fault_in_page + 0x2c/0xf0",
+    "Modules linked in: kvm",
+    "CPU: 2 PID: 1041 Comm: qemu-system-risv Not tainted",
+    "Hardware name: riscv-virtio virtio_dev",
+    "Call trace: kvm_handle_guest_fault -> kvm_vcpu_fault_in_page"
+  ],
+  "report": [
+    "==================================================================",
+    "BUG: kernel NULL pointer dereference at 0000000000000000",
+    "NULL stage-2 context dereferenced in the stage-2 fault path.",
+    "kvm_vcpu_fault_in_page at arch/riscv/kvm/vcpu.c:412",
+    "Freed by: kvm_vcpu_put -> stage2 context release",
+    "The faulting vCPU had its stage-2 context detached by a concurrent teardown"
+  ]
+}
